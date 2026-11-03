@@ -1,186 +1,132 @@
 // ============================================
-// ОСНОВНАЯ ЛОГИКА ПРИЛОЖЕНИЯ
-// РАБОТА ЧАТА С ИИ
+// ЛОГИКА ПРИЛОЖЕНИЯ: ЧАТ, СБРОС, КАРТОЧКА ГЕРОЯ
 // ============================================
 
-// История сообщений
 let messageHistory = [];
 
-// ============================================
-// ДОБАВЛЕНИЕ СООБЩЕНИЯ В ЧАТ
-// ============================================
-
 function addMessage(text, sender) {
-    const chatMessages = document.getElementById('chatMessages');
-    
-    // Создаём контейнер сообщения
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    
-    // Определяем префикс (Вы или AI)
-    const prefix = sender === 'user' ? 'Вы' : 'AI';
-    
-    // Заполняем сообщение (поддерживает HTML теги)
-    messageDiv.innerHTML = `<strong>${prefix}:</strong><br>${text}`;
-    
-    // Добавляем в чат
-    chatMessages.appendChild(messageDiv);
-    
-    // Автоскролл вниз
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    // Сохраняем в историю
-    messageHistory.push({
-        sender: sender,
-        text: text,
-        time: new Date().toLocaleTimeString()
-    });
+  const chatMessages = document.getElementById('chatMessages');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message ${sender}-message`;
+  const prefix = sender === 'user' ? 'Вы' : 'AI';
+  messageDiv.innerHTML = `<strong>${prefix}:</strong><br>${text}`;
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  messageHistory.push({sender, text, time: new Date().toLocaleTimeString()});
 }
-
-// ============================================
-// ОТПРАВКА СООБЩЕНИЯ
-// ============================================
 
 async function sendMessage() {
-    const userInput = document.getElementById('userInput');
-    const question = userInput.value.trim();
-    
-    // Проверка на пустое сообщение
-    if (!question) return;
-    
-    // Добавляем сообщение пользователя
-    addMessage(question, 'user');
-    
-    // Очищаем поле ввода
-    userInput.value = '';
-    
-    // Показываем индикатор "печатает..."
-    const loadingMsg = document.createElement('div');
-    loadingMsg.className = 'message bot-message';
-    loadingMsg.id = 'loading';
-    loadingMsg.innerHTML = '<strong>AI:</strong> Думаю... 🤔';
-    document.getElementById('chatMessages').appendChild(loadingMsg);
-    
-    // Автоскролл
-    document.getElementById('chatMessages').scrollTop = 
-        document.getElementById('chatMessages').scrollHeight;
-    
-    // Небольшая задержка для реалистичности
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Получаем ответ от ИИ
-    const answer = await dotaAI.getAnswer(question);
-    
-    // Удаляем индикатор загрузки
-    const loadingElement = document.getElementById('loading');
-    if (loadingElement) {
-        loadingElement.remove();
-    }
-    
-    // Добавляем ответ ИИ
-    addMessage(answer, 'bot');
-    
-    // Сохраняем историю
-    saveHistory();
+  const userInput = document.getElementById('userInput');
+  const question = userInput.value.trim();
+  if (!question) return;
+
+  addMessage(question, 'user');
+  userInput.value = '';
+
+  const loadingMsg = document.createElement('div');
+  loadingMsg.className = 'message bot-message';
+  loadingMsg.id = 'loading';
+  loadingMsg.innerHTML = '<strong>AI:</strong> Думаю... 🤔';
+  document.getElementById('chatMessages').appendChild(loadingMsg);
+  document.getElementById('chatMessages').scrollTop = 999999;
+
+  await new Promise(r => setTimeout(r, 400));
+  const answer = await dotaAI.getAnswer(question);
+
+  const le = document.getElementById('loading');
+  if (le) le.remove();
+  addMessage(answer, 'bot');
 }
 
-// ============================================
-// ОБРАБОТКА БЫСТРЫХ ВОПРОСОВ
-// ============================================
-
-function setupQuickButtons() {
-    const quickButtons = document.querySelectorAll('.quick-btn');
-    
-    quickButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const question = btn.getAttribute('data-question');
-            
-            // Устанавливаем вопрос в поле ввода
-            document.getElementById('userInput').value = question;
-            
-            // Отправляем
-            sendMessage();
-        });
-    });
-}
-
-// ============================================
-// СОХРАНЕНИЕ И ЗАГРУЗКА ИСТОРИИ
-// ============================================
-
-function saveHistory() {
-    try {
-        localStorage.setItem('dota2_chat_history', JSON.stringify(messageHistory));
-    } catch (e) {
-        console.log('Не удалось сохранить историю:', e);
-    }
-}
-
-function loadHistory() {
-    try {
-        const saved = localStorage.getItem('dota2_chat_history');
-        if (saved) {
-            const history = JSON.parse(saved);
-            
-            // Восстанавливаем последние 20 сообщений
-            const lastMessages = history.slice(-20);
-            
-            lastMessages.forEach(msg => {
-                const chatMessages = document.getElementById('chatMessages');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${msg.sender}-message`;
-                const prefix = msg.sender === 'user' ? 'Вы' : 'AI';
-                messageDiv.innerHTML = `<strong>${prefix}:</strong><br>${msg.text}`;
-                chatMessages.appendChild(messageDiv);
-            });
-            
-            // Автоскролл
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            messageHistory = history;
-        }
-    } catch (e) {
-        console.log('Не удалось загрузить историю:', e);
-    }
-}
-
-// ============================================
-// ОЧИСТКА ЧАТА
-// ============================================
-
+// ============ СБРОС ДИАЛОГА ============
 function clearChat() {
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.innerHTML = '<div class="message bot-message"><strong>AI:</strong> Чат очищен. Чем могу помочь? 😊</div>';
-    messageHistory = [];
-    localStorage.removeItem('dota2_chat_history');
+  document.getElementById('chatMessages').innerHTML =
+    '<div class="message bot-message"><strong>AI:</strong> Диалог сброшен. Спрашивай что угодно о Dota 2! 🎮</div>';
+  messageHistory = [];
+  try { localStorage.removeItem('dota2_chat_history'); } catch (e) {}
 }
 
-// ============================================
-// ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
-// ============================================
+// ============ КАРТОЧКА ГЕРОЯ ВМЕСТО ЧАТА ============
+// Переопределяем функцию из heroes.js — клик больше не пишет в чат
+function showHeroInfo(hero) {
+  openHeroModal(hero);
+}
 
+function openHeroModal(hero) {
+  const modal = document.getElementById('heroModal');
+  const body = document.getElementById('heroModalBody');
+  if (!modal || !body) return;
+
+  const iconUrl = ICON_URL + hero.icon + '.png';
+  const s = (typeof getHeroStats === 'function') ? getHeroStats(hero) : null;
+
+  const attrRu = {Strength:'Сила', Agility:'Ловкость', Intelligence:'Интеллект', Universal:'Универсальный'};
+  const diffRu = {Easy:'Легко', Medium:'Средне', Hard:'Сложно', 'Very Hard':'Очень сложно'};
+
+  let statsHtml = '';
+  if (s) {
+    statsHtml = `
+      <div class="hm-stats">
+        <div class="hm-stat">Винрейт (паблик)<b class="win">${pct(s.pub_win)}</b></div>
+        <div class="hm-stat">Пикрейт (паблик)<b>${pct(s.pub_pick)}</b></div>
+        <div class="hm-stat">Винрейт (просцена)<b class="win">${pct(s.pro_win)}</b></div>
+        <div class="hm-stat">Пикрейт (просцена)<b>${pct(s.pro_pick)}</b></div>
+      </div>`;
+  } else {
+    statsHtml = '<p style="color:#a3a3a3;font-size:13px;margin-top:14px">Свежие винрейты не загружены (офлайн-режим). Нажми «🔄 Обновить мету» в чате.</p>';
+  }
+
+  body.innerHTML = `
+    <div class="hm-head">
+      <img src="${iconUrl}" alt="${hero.name}" class="hm-icon">
+      <div>
+        <h3 style="font-size:22px;font-weight:800">${hero.name}</h3>
+        <div style="color:#a3a3a3;font-size:14px">${hero.ru}</div>
+      </div>
+    </div>
+    <p style="font-size:14px;color:#ddd;line-height:1.7">
+      ⚔️ Атрибут: <strong>${attrRu[hero.attr]}</strong><br>
+      🎯 Роль: ${hero.role}<br>
+      ⭐ Сложность: ${diffRu[hero.difficulty]}
+    </p>
+    ${statsHtml}
+  `;
+  modal.classList.add('open');
+}
+
+function closeHeroModal() {
+  const modal = document.getElementById('heroModal');
+  if (modal) modal.classList.remove('open');
+}
+
+// ============ ИНИЦИАЛИЗАЦИЯ ============
 document.addEventListener('DOMContentLoaded', () => {
-    // Кнопка отправки
-    const sendBtn = document.getElementById('sendBtn');
-    if (sendBtn) {
-        sendBtn.addEventListener('click', sendMessage);
-    }
-    
-    // Отправка по клавише Enter
-    const userInput = document.getElementById('userInput');
-    if (userInput) {
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    }
-    
-    // Настраиваем быстрые вопросы
-    setupQuickButtons();
-    
-    // Загружаем историю (опционально - раскомментируй если нужно)
-    // loadHistory();
-    
-    console.log('🎮 Dota 2 AI Assistant загружен!');
+  // Отправка сообщений
+  document.getElementById('sendBtn').addEventListener('click', sendMessage);
+  document.getElementById('userInput').addEventListener('keypress', e => {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  // Быстрые вопросы
+  document.querySelectorAll('.quick-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.getElementById('userInput').value = b.getAttribute('data-question');
+      sendMessage();
+    });
+  });
+
+  // Сброс диалога
+  const clearBtn = document.getElementById('clearChatBtn');
+  if (clearBtn) clearBtn.addEventListener('click', clearChat);
+
+  // Обновить мету
+  const refreshBtn = document.getElementById('refreshMetaBtn');
+  if (refreshBtn) refreshBtn.addEventListener('click', () => loadLiveStats(true));
+
+  // Закрытие карточки героя
+  const closeBtn = document.getElementById('heroModalClose');
+  if (closeBtn) closeBtn.addEventListener('click', closeHeroModal);
+  const modal = document.getElementById('heroModal');
+  if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeHeroModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHeroModal(); });
 });
