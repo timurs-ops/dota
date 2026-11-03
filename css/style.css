@@ -218,3 +218,35 @@ footer{background:#191919;border-top:1px solid var(--border);padding:60px 0 30px
   .chat-input .btn{justify-content:center}
   .cta-card{padding:32px 24px}
 }
+/* ============ ПАНЕЛЬ ИНСТРУМЕНТОВ ЧАТА ============ */
+.chat-toolbar{display:flex;justify-content:space-between;align-items:center;
+  gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.chat-status{font-size:12px;color:var(--muted)}
+.chat-tools{display:flex;gap:8px}
+.tool-btn{background:#262626;border:1px solid var(--border);color:#ddd;border-radius:8px;
+  padding:8px 14px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:.2s}
+.tool-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tool-btn.danger:hover{border-color:#e74c3c;color:#e74c3c}
+
+/* ============ КАРТОЧКА ГЕРОЯ (МОДАЛКА) ============ */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
+.modal.open{display:flex}
+.modal-box{background:#202020;border:1px solid var(--border);border-radius:16px;
+  padding:28px;max-width:460px;width:100%;position:relative;max-height:85vh;overflow-y:auto}
+.modal-close{position:absolute;top:8px;right:14px;background:none;border:none;
+  color:#888;font-size:28px;line-height:1;cursor:pointer}
+.modal-close:hover{color:#fff}
+.hm-head{display:flex;gap:16px;align-items:center;margin-bottom:16px}
+.hm-icon{width:150px;aspect-ratio:16/9;object-fit:cover;object-position:top center;
+  border-radius:10px;border:1px solid var(--border);flex-shrink:0}
+.hm-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.hm-stat{background:#1a1a1a;border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;font-size:12px;color:var(--muted)}
+.hm-stat b{display:block;color:#fff;font-size:15px;margin-top:3px}
+.hm-stat b.win{color:#48ec6f}
+@media(max-width:480px){
+  .hm-head{flex-direction:column;align-items:flex-start}
+  .hm-icon{width:100%}
+  .hm-stats{grid-template-columns:1fr}
+}
