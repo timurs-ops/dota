@@ -250,3 +250,8 @@ footer{background:#191919;border-top:1px solid var(--border);padding:60px 0 30px
   .hm-icon{width:100%}
   .hm-stats{grid-template-columns:1fr}
 }
+/* Заглушка иконки, если картинка не загрузилась */
+.hero-fallback{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:800;color:#fff;border-radius:8px;text-shadow:0 2px 4px rgba(0,0,0,.5);
+}
