@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dota 2 AI Assistant</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container">
+            <h1>Dota 2 AI Assistant</h1>
+            <p>Все 125 героев + ИИ-помощник</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Секция поиска героев -->
+        <section class="hero-search">
+            <!-- Поиск по имени героя -->
+            <input type="text" id="heroSearch" placeholder="Поиск героя по имени...">
+            
+            <!-- Контейнер для фильтров (заполняется через JS) -->
+            <div id="filters" class="filters-container"></div>
+            
+            <!-- Счётчик найденных героев -->
+            <div id="heroCount" class="hero-count"></div>
+            
+            <!-- Сетка с героями (заполняется через JS) -->
+            <div id="heroList" class="hero-grid"></div>
+        </section>
+
+        <!-- Секция чата с ИИ -->
+        <section class="chat-section">
+            <h3>Чат с ИИ-ассистентом</h3>
+            
+            <!-- Контейнер с сообщениями -->
+            <div id="chatMessages" class="chat-messages">
+                <div class="message bot-message">
+                    <strong>AI:</strong> Привет! Я помогу с вопросами о Dota 2. Спросите о героях, предметах или механиках!
+                </div>
+            </div>
+            
+            <!-- Поле ввода и кнопка отправки -->
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Введите ваш вопрос...">
+                <button id="sendBtn">Отправить</button>
+            </div>
+        </section>
+
+        <!-- Быстрые вопросы -->
+        <section class="quick-questions">
+            <h3>Популярные вопросы:</h3>
+            <div class="questions-list">
+                <button class="quick-btn" data-question="Лучшие герои для новичков?">Новичкам</button>
+                <button class="quick-btn" data-question="Что такое MMR?">MMR</button>
+                <button class="quick-btn" data-question="Как фармить золото?">Фарм</button>
+                <button class="quick-btn" data-question="Билд на Pudge">Pudge</button>
+                <button class="quick-btn" data-question="Контрпики против Invoker">Контра Инвокер</button>
+                <button class="quick-btn" data-question="Роли в Доте">Роли</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="container">
+            <p>Dota 2 AI Assistant | Бесплатно | Все 125 героев</p>
+        </div>
+    </footer>
+
+    <!-- Подключение скриптов -->
+    <script src="js/heroes.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
