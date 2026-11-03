@@ -75,19 +75,16 @@ class DotaAI {
         `;
     }
 
-    // Главная функция ответа
-    async getAnswer(question) {
+       async getAnswer(question) {
         const lowerQ = question.toLowerCase();
-
-        // 1. Синонимы
         let processedQ = lowerQ;
         for (const [syn, orig] of Object.entries(this.synonyms)) {
             if (lowerQ.includes(syn)) processedQ += ' ' + orig;
         }
 
-        // 2. Вопросы о мете/винрейтах — через живые данные
-        const winKeys = ['винрейт', 'вин рейт', 'winrate', 'win rate', 'процент побед'];
-        const metaKeys = ['мета', 'meta', 'патч', 'patch', 'изменени', 'топ героев', 'сильные герои', 'актуальн', 'обновлени'];
+        // 1. Винрейты/мета — из локальных данных
+        const winKeys = ['винрейт', 'winrate', 'win rate', 'процент побед'];
+        const metaKeys = ['мета', 'meta', 'патч', 'patch', 'топ героев', 'сильные герои', 'актуальн'];
 
         if (winKeys.some(k => lowerQ.includes(k))) {
             if (typeof getWinrateAnswer === 'function') {
@@ -95,52 +92,49 @@ class DotaAI {
                 if (ans) return ans;
             }
         }
-        if (metaKeys.some(k => lowerQ.includes(k)) && typeof getMetaAnswer === 'function') {
-            const ans = getMetaAnswer();
-            if (ans) return ans;
+        if (metaKeys.some(k => lowerQ.includes(k))) {
+            if (typeof getMetaAnswer === 'function') {
+                const ans = getMetaAnswer();
+                if (ans) return ans;
+            }
         }
 
-        // 3. База знаний
+        // 2. База знаний
         for (const [key, answer] of Object.entries(this.knowledgeBase)) {
             if (processedQ.includes(key)) return answer;
         }
 
-        // 4. Упоминание героя
+        // 3. Герой
         const heroMention = (typeof findHero === 'function') ? findHero(processedQ) : null;
         if (heroMention) return this.formatHeroAnswer(heroMention);
 
-        // 5. Общие вопросы
-        if (lowerQ.includes('как') && (lowerQ.includes('играть') || lowerQ.includes('начать'))) {
-            return '🎮 Основы: 1) Фарми крипов 2) Покупай предметы 3) Участвуй в тимфайтах 4) Ломай башни. Спроси о герое или механике!';
-        }
-        if (lowerQ.includes('что такое') || lowerQ.includes('расскажи')) {
-            return '🤔 Уточни! Могу рассказать о: героях ("расскажи про Пуджа"), предметах ("что такое БКБ"), механиках ("варды", "рошан"), ролях, стратегиях, мете патча.';
-        }
+        // 4. Общие вопросы
         if (lowerQ.includes('билд') || lowerQ.includes('предметы на')) {
             const hero = (typeof findHero === 'function') ? findHero(processedQ) : null;
             if (hero) {
-                return `🛒 Билд для <strong>${hero.name}</strong> (${hero.ru}):<br>• Начало: ветки, фласки, танго<br>• Мидгейм: по роли<br>• Лейт: ситуативно (BKB против магии, Shiva против физов)<br><br>💡 Точный билд — на Dotabuff!`;
+                return `🛒 <strong>${hero.name}</strong> (${hero.ru}):<br>• Начало: ветки, фласки, танго<br>• Мидгейм: по роли<br>• Лейт: BKB против магии, Shiva против физов<br><br>💡 Точный билд — на Dotabuff.`;
             }
-            return '🛒 Укажи героя! Например: "билд на Пуджа" или "предметы на Антимага"';
+            return '🛒 Укажи героя! Например: "билд на Пуджа"';
         }
+
         if (lowerQ.includes('контр')) {
             const hero = (typeof findHero === 'function') ? findHero(processedQ) : null;
             if (hero) {
-                return `🔄 Против <strong>${hero.name}</strong>: против магии — BKB/Pipe, против физов — Ghost/Shiva/Butterfly, против хила — Spirit Vessel/Ancient Apparition.`;
+                return `🔄 Против <strong>${hero.name}</strong>: против магии — BKB/Pipe, против физов — Ghost/Shiva, против хила — Spirit Vessel/Ancient Apparition.`;
             }
-            return '🔄 Контрпики: против инвиза — Sentry/Gem, против магии — BKB/Pipe, против физов — Ghost/Shiva. Уточни героя!';
+            return '🔄 Уточни героя! Например: "контрпики на Инвокера"';
         }
 
-        // 6. Запасной ответ
-        return `🤔 Интересный вопрос!<br><br>Попробуй спросить:<br>
-            • "Расскажи про Пуджа"<br>
-            • "Винрейт Пуджа" (актуальная мета)<br>
+        if (lowerQ.includes('как') && (lowerQ.includes('играть') || lowerQ.includes('начать'))) {
+            return '🎮 Основы: 1) Фарми 2) Покупай предметы 3) Тимфайты 4) Ломай башни. Спроси о герое или механике!';
+        }
+
+        return `🤔 Попробуй спросить:<br>
+            • "Винрейт Пуджа"<br>
+            • "Билд на Джаггернаута"<br>
             • "Какая сейчас мета?"<br>
-            • "Билд на Антимага"<br>
+            • "Расскажи про Инвокера"<br>
             • "Что такое БКБ?"<br>
             • "Как фармить?"<br>
             • "Роли в Доте"`;
     }
-}
-
-const dotaAI = new DotaAI();
