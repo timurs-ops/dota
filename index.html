@@ -100,9 +100,9 @@
       </div>
       <div class="srv-card span-2 reveal">
         <div class="srv-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-        <h3>Билды и контрпики</h3>
-        <div class="srv-sub">Советы по героям</div>
-        <p>ИИ подскажет предметы и контрпики против надоевших Инвокеров и Фантом Ассасинов.</p>
+        <h3>Актуальная мета</h3>
+        <div class="srv-sub">Винрейты после патчей</div>
+        <p>ИИ подтягивает свежие винрейты и пикрейты героев из OpenDota — данные обновляются после каждого патча.</p>
       </div>
       <div class="srv-card span-2 reveal">
         <div class="srv-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg></div>
@@ -126,7 +126,7 @@
     <div class="why-text reveal">
       <span class="badge dot">Почему этот сайт</span>
       <h2 class="sec-title" style="margin-bottom:24px">Больше чем просто вики</h2>
-      <p>Мы не просто храним список героев — мы строим умного помощника. Каждая карточка героя кликабельна, а ИИ понимает обычный человеческий язык и игровой сленг.</p>
+      <p>Мы не просто храним список героев — мы строим умного помощника. Карточка каждого героя открывается в один клик, а ИИ понимает обычный человеческий язык и игровой сленг.</p>
       <p>База знаний постоянно пополняется: механики, предметы, руны, Рошан, тайминги и стратегии — всё в одном чате.</p>
       <p class="bold-line">Отвечает по-русски, включая сленг: «цмка», «па», «фантик», «квопа»</p>
     </div>
@@ -143,19 +143,19 @@
     <div class="proc-grid">
       <div class="proc-card reveal">
         <div class="proc-head"><span class="proc-num">01</span><h3>Найди героя</h3></div>
-        <p>Поиск или фильтры: атрибут, роль, сложность. Иконки героев загружаются с официального CDN Valve.</p>
+        <p>Поиск или фильтры: атрибут, роль, сложность. Клик по герою открывает карточку с винрейтами.</p>
       </div>
       <div class="proc-card reveal">
         <div class="proc-head"><span class="proc-num">02</span><h3>Спроси ИИ</h3></div>
-        <p>Напиши вопрос в чат: про билд, контрпики, механики или стратегии — обычным русским языком.</p>
+        <p>Напиши вопрос в чат: про билд, контрпики, механики или мету текущего патча.</p>
       </div>
       <div class="proc-card reveal">
         <div class="proc-head"><span class="proc-num">03</span><h3>Получи ответ</h3></div>
-        <p>ИИ ответит из базы знаний и покажет карточку героя с иконкой и характеристиками.</p>
+        <p>ИИ ответит из базы знаний и покажет актуальные винрейты героев из OpenDota.</p>
       </div>
       <div class="proc-card reveal">
         <div class="proc-head"><span class="proc-num">04</span><h3>Выигрывай</h3></div>
-        <p>Применяй советы в игре: фарми эффективнее,ピック контрпики и поднимай MMR.</p>
+        <p>Применяй советы в игре: фарми эффективнее, пикай контрпики и поднимай MMR.</p>
       </div>
     </div>
   </div>
@@ -179,11 +179,19 @@
     <span class="badge dot reveal">ИИ-ассистент</span>
     <h2 class="sec-title reveal">Спроси что угодно о Dota 2</h2>
     <div class="chat-box reveal">
+      <!-- Панель инструментов чата -->
+      <div class="chat-toolbar">
+        <span class="chat-status" id="metaStatus">Мета: загрузка данных...</span>
+        <div class="chat-tools">
+          <button id="refreshMetaBtn" class="tool-btn" title="Загрузить свежие винрейты героев">🔄 Обновить мету</button>
+          <button id="clearChatBtn" class="tool-btn danger" title="Очистить переписку с ИИ">🗑 Сбросить диалог</button>
+        </div>
+      </div>
       <div id="chatMessages" class="chat-messages">
-        <div class="message bot-message"><strong>AI:</strong> Привет! Спроси про героев, предметы, билды или механики Dota 2 — отвечу по-русски! 🎮</div>
+        <div class="message bot-message"><strong>AI:</strong> Привет! Спроси про героев, предметы, билды или мету текущего патча — отвечу по-русски! 🎮</div>
       </div>
       <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Например: билд на Пуджа...">
+        <input type="text" id="userInput" placeholder="Например: винрейт Пуджа, топ героев...">
         <button id="sendBtn" class="btn">Отправить</button>
       </div>
     </div>
@@ -191,11 +199,11 @@
       <h4>Популярные вопросы:</h4>
       <div class="questions-list">
         <button class="quick-btn" data-question="Лучшие герои для новичков?">Новичкам</button>
-        <button class="quick-btn" data-question="Что такое MMR?">MMR</button>
-        <button class="quick-btn" data-question="Как фармить золото?">Фарм</button>
+        <button class="quick-btn" data-question="Какая сейчас мета?">Мета патча</button>
+        <button class="quick-btn" data-question="Винрейт Пуджа">Винрейт Пуджа</button>
         <button class="quick-btn" data-question="Билд на Pudge">Билд на Пуджа</button>
         <button class="quick-btn" data-question="Контрпики против Invoker">Контра Инвокера</button>
-        <button class="quick-btn" data-question="Роли в Доте">Роли</button>
+        <button class="quick-btn" data-question="Что такое MMR?">MMR</button>
       </div>
     </div>
   </div>
@@ -237,8 +245,8 @@
         <h4>Полезное</h4>
         <div class="socials">
           <a href="https://www.dotabuff.com" target="_blank">Dotabuff</a>
+          <a href="https://www.opendota.com" target="_blank">OpenDota</a>
           <a href="https://liquipedia.net/dota2" target="_blank">Liquipedia</a>
-          <a href="https://dota2.fandom.com" target="_blank">Dota 2 Wiki</a>
         </div>
       </div>
     </div>
@@ -249,31 +257,36 @@
   </div>
 </footer>
 
-<!-- JS проекта (без изменений) -->
+<!-- КАРТОЧКА ГЕРОЯ (открывается по клику вместо чата) -->
+<div class="modal" id="heroModal">
+  <div class="modal-box">
+    <button class="modal-close" id="heroModalClose">×</button>
+    <div id="heroModalBody"></div>
+  </div>
+</div>
+
+<!-- СКРИПТЫ (порядок важен!) -->
 <script src="js/heroes.js"></script>
 <script src="js/ai.js"></script>
+<script src="js/meta.js"></script>
 <script src="js/app.js"></script>
 
 <!-- Анимации дизайна -->
 <script>
-// Бургер-меню
 document.getElementById('burger').addEventListener('click', () => {
   document.getElementById('nav').classList.toggle('open');
 });
 document.querySelectorAll('#nav a').forEach(a =>
   a.addEventListener('click', () => document.getElementById('nav').classList.remove('open')));
 
-// Появление секций
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
 }), {threshold: .12});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// Полоски в карточке статистики
 setTimeout(() => document.querySelectorAll('.bar-fill').forEach(b =>
   b.style.width = b.dataset.width + '%'), 400);
 
-// Счётчики цифр
 const cio = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
   const el = e.target, target = +el.dataset.count, t0 = performance.now();
