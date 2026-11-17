@@ -1,5 +1,5 @@
 // ============================================
-// БАЗА 125 ГЕРОЕВ DOTA 2 (с ПРАВИЛЬНЫМИ именами иконок)
+// БАЗА 125 ГЕРОЕВ DOTA 2 (с ИСПРАВЛЕННЫМИ именами иконок)
 // ============================================
 
 const ICON_URL = 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/';
@@ -12,7 +12,7 @@ const heroesDB = [
     {name:"Bristleback",ru:"Бристлбэк",attr:"Strength",role:"Offlane",difficulty:"Easy",icon:"bristleback"},
     {name:"Centaur Warrunner",ru:"Кентавр",attr:"Strength",role:"Offlane",difficulty:"Easy",icon:"centaur"},
     {name:"Chaos Knight",ru:"Хаос Найт",attr:"Strength",role:"Carry",difficulty:"Easy",icon:"chaos_knight"},
-    {name:"Clockwerk",ru:"Клокверк",attr:"Strength",role:"Support/Offlane",difficulty:"Medium",icon:"clockwerk"},
+    {name:"Clockwerk",ru:"Клокверк",attr:"Strength",role:"Support/Offlane",difficulty:"Medium",icon:"rattletrap"}, // ИСПРАВЛЕНО
     {name:"Dawnbreaker",ru:"Давнбрейкер",attr:"Strength",role:"Carry/Offlane",difficulty:"Medium",icon:"dawnbreaker"},
     {name:"Dragon Knight",ru:"Драгон Найт",attr:"Strength",role:"Mid/Offlane",difficulty:"Easy",icon:"dragon_knight"},
     {name:"Earth Spirit",ru:"Земляной Дух",attr:"Strength",role:"Support/Roamer",difficulty:"Hard",icon:"earth_spirit"},
@@ -21,7 +21,7 @@ const heroesDB = [
     {name:"Huskar",ru:"Хускар",attr:"Strength",role:"Mid",difficulty:"Medium",icon:"huskar"},
     {name:"Kunkka",ru:"Кунка",attr:"Strength",role:"Mid/Offlane",difficulty:"Medium",icon:"kunkka"},
     {name:"Legion Commander",ru:"Легион Коммандер",attr:"Strength",role:"Offlane",difficulty:"Easy",icon:"legion_commander"},
-    {name:"Lifestealer",ru:"Лайфстилер",attr:"Strength",role:"Carry",difficulty:"Easy",icon:"lifestealer"},
+    {name:"Lifestealer",ru:"Лайфстилер",attr:"Strength",role:"Carry",difficulty:"Easy",icon:"life_stealer"}, // ИСПРАВЛЕНО
     {name:"Lycan",ru:"Ликан",attr:"Strength",role:"Carry/Offlane",difficulty:"Medium",icon:"lycan"},
     {name:"Mars",ru:"Марс",attr:"Strength",role:"Offlane",difficulty:"Medium",icon:"mars"},
     {name:"Night Stalker",ru:"Найт Сталкер",attr:"Strength",role:"Offlane/Roamer",difficulty:"Easy",icon:"night_stalker"},
@@ -34,7 +34,7 @@ const heroesDB = [
     {name:"Spirit Breaker",ru:"Спирит Брейкер",attr:"Strength",role:"Roamer/Support",difficulty:"Easy",icon:"spirit_breaker"},
     {name:"Sven",ru:"Свен",attr:"Strength",role:"Carry",difficulty:"Easy",icon:"sven"},
     {name:"Tidehunter",ru:"Тайдхантер",attr:"Strength",role:"Offlane",difficulty:"Easy",icon:"tidehunter"},
-    {name:"Timbersaw",ru:"Тимберсоу",attr:"Strength",role:"Offlane/Mid",difficulty:"Medium",icon:"timbersaw"},
+    {name:"Timbersaw",ru:"Тимберсоу",attr:"Strength",role:"Offlane/Mid",difficulty:"Medium",icon:"shredder"}, // ИСПРАВЛЕНО
     {name:"Tiny",ru:"Тини",attr:"Strength",role:"Mid/Offlane",difficulty:"Medium",icon:"tiny"},
     {name:"Treant Protector",ru:"Триант",attr:"Strength",role:"Support",difficulty:"Easy",icon:"treant"},
     {name:"Tusk",ru:"Таск",attr:"Strength",role:"Roamer/Support",difficulty:"Medium",icon:"tusk"},
@@ -92,7 +92,7 @@ const heroesDB = [
     {name:"Enigma",ru:"Энигма",attr:"Intelligence",role:"Offlane/Support",difficulty:"Medium",icon:"enigma"},
     {name:"Grimstroke",ru:"Гримстроук",attr:"Intelligence",role:"Support",difficulty:"Medium",icon:"grimstroke"},
     {name:"Invoker",ru:"Инвокер",attr:"Intelligence",role:"Mid",difficulty:"Very Hard",icon:"invoker"},
-    {name:"Io",ru:"Ио",attr:"Intelligence",role:"Support",difficulty:"Very Hard",icon:"io"},
+    {name:"Io",ru:"Ио",attr:"Intelligence",role:"Support",difficulty:"Very Hard",icon:"wisp"}, // ИСПРАВЛЕНО
     {name:"Jakiro",ru:"Джакиро",attr:"Intelligence",role:"Support",difficulty:"Easy",icon:"jakiro"},
     {name:"Keeper of the Light",ru:"Кипер",attr:"Intelligence",role:"Support/Mid",difficulty:"Medium",icon:"keeper_of_the_light"},
     {name:"Leshrac",ru:"Лешрак",attr:"Intelligence",role:"Mid/Offlane",difficulty:"Medium",icon:"leshrac"},
@@ -100,7 +100,7 @@ const heroesDB = [
     {name:"Lina",ru:"Лина",attr:"Intelligence",role:"Mid/Support",difficulty:"Medium",icon:"lina"},
     {name:"Lion",ru:"Лион",attr:"Intelligence",role:"Support",difficulty:"Easy",icon:"lion"},
     {name:"Muerta",ru:"Муэрта",attr:"Intelligence",role:"Carry/Support",difficulty:"Medium",icon:"muerta"},
-    {name:"Necrophos",ru:"Некрофос",attr:"Intelligence",role:"Offlane/Mid",difficulty:"Easy",icon:"necrophos"},
+    {name:"Necrophos",ru:"Некрофос",attr:"Intelligence",role:"Offlane/Mid",difficulty:"Easy",icon:"necrolyte"}, // ИСПРАВЛЕНО
     {name:"Oracle",ru:"Оракул",attr:"Intelligence",role:"Support",difficulty:"Hard",icon:"oracle"},
     {name:"Outworld Destroyer",ru:"Аутворлд",attr:"Intelligence",role:"Mid",difficulty:"Medium",icon:"obsidian_destroyer"},
     {name:"Puck",ru:"Пак",attr:"Intelligence",role:"Mid",difficulty:"Hard",icon:"puck"},
@@ -126,10 +126,10 @@ const heroesDB = [
     {name:"Bane",ru:"Бейн",attr:"Universal",role:"Support",difficulty:"Medium",icon:"bane"},
     {name:"Dazzle",ru:"Дазл",attr:"Universal",role:"Support",difficulty:"Easy",icon:"dazzle"},
     {name:"Death Prophet",ru:"Дес Профет",attr:"Universal",role:"Mid/Offlane",difficulty:"Medium",icon:"death_prophet"},
-    {name:"Doom",ru:"Дум",attr:"Universal",role:"Offlane",difficulty:"Medium",icon:"doom"},
+    {name:"Doom",ru:"Дум",attr:"Universal",role:"Offlane",difficulty:"Medium",icon:"doom_bringer"}, // ИСПРАВЛЕНО
     {name:"Lone Druid",ru:"Лоне Друид",attr:"Universal",role:"Carry/Mid",difficulty:"Hard",icon:"lone_druid"},
-    {name:"Magnus",ru:"Магнус",attr:"Universal",role:"Offlane",difficulty:"Medium",icon:"magnus"},
-    {name:"Nature's Prophet",ru:"Фурион",attr:"Universal",role:"Offlane/Support",difficulty:"Medium",icon:"natures_prophet"},
+    {name:"Magnus",ru:"Магнус",attr:"Universal",role:"Offlane",difficulty:"Medium",icon:"magnataur"}, // ИСПРАВЛЕНО
+    {name:"Nature's Prophet",ru:"Фурион",attr:"Universal",role:"Offlane/Support",difficulty:"Medium",icon:"furion"}, // ИСПРАВЛЕНО
     {name:"Nyx Assassin",ru:"Никс Ассассин",attr:"Universal",role:"Support/Roamer",difficulty:"Medium",icon:"nyx_assassin"},
     {name:"Ogre Magi",ru:"Огр Маги",attr:"Universal",role:"Support",difficulty:"Easy",icon:"ogre_magi"},
     {name:"Pangolier",ru:"Панголье",attr:"Universal",role:"Mid/Offlane",difficulty:"Medium",icon:"pangolier"},
