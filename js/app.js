@@ -62,7 +62,7 @@ function openHeroModal(hero) {
     const attrRu = {Strength:'Сила', Agility:'Ловкость', Intelligence:'Интеллект', Universal:'Универсальный'};
     const diffRu = {Easy:'Легко', Medium:'Средне', Hard:'Сложно', 'Very Hard':'Очень сложно'};
 
-    // 1. Только 2 винрейта (убраны пикрейты)
+    // Только 2 винрейта (паблик + просцена), без пикрейтов
     let statsHtml = '';
     if (s && typeof pct === 'function') {
         statsHtml = `
@@ -74,37 +74,36 @@ function openHeroModal(hero) {
         statsHtml = '<p style="color:#a3a3a3;font-size:13px;margin-top:14px">Свежие винрейты не загружены. Нажми «🔄 Обновить мету» в чате.</p>';
     }
 
-    // 2. Лучшая сборка предметов с иконками
+    // Лучшая сборка предметов с иконками из Steam CDN
     let itemsHtml = '';
     if (s && s.items && s.items.length > 0) {
         const itemNames = {
             'battle_fury': 'Battle Fury', 'manta': 'Manta Style', 'abyssal_blade': 'Abyssal Blade',
             'butterfly': 'Butterfly', 'black_king_bar': 'BKB', 'blade_mail': 'Blade Mail',
             'blink': 'Blink Dagger', 'heart': 'Heart', 'crimson_guard': 'Crimson Guard',
-            'pipe': 'Pipe', 'ultimate_scepter': 'Aghanim\'s Scepter', 'aghanims_shard': 'Aghanim\'s Shard',
+            'pipe': 'Pipe', 'ultimate_scepter': "Aghanim's", 'aghanims_shard': "Aghanim's Shard",
             'force_staff': 'Force Staff', 'glimmer_cape': 'Glimmer Cape', 'guardian_greaves': 'Guardian Greaves',
             'aether_lens': 'Aether Lens', 'dragon_lance': 'Dragon Lance', 'hurricane_pike': 'Hurricane Pike',
-            'assault': 'Assault', 'skadi': 'Eye of Skadi', 'diffusal_blade': 'Diffusal Blade',
-            'bloodstone': 'Bloodstone', 'linkens': 'Linken\'s', 'orchid': 'Orchid',
-            'daedalus': 'Daedalus', 'desolator': 'Desolator', 'satanic': 'Satanic', 'shivas': 'Shiva\'s',
-            'refresher': 'Refresher', 'octarine_core': 'Octarine', 'scythe': 'Scythe',
+            'assault_cuirass': 'Assault', 'skadi': 'Eye of Skadi', 'diffusal_blade': 'Diffusal Blade',
+            'bloodstone': 'Bloodstone', 'linken_sphere': "Linken's", 'orchid': 'Orchid',
+            'greater_crit': 'Daedalus', 'desolator': 'Desolator', 'satanic': 'Satanic', 'shivas_guard': "Shiva's",
+            'refresher': 'Refresher', 'octarine_core': 'Octarine', 'scythe_of_vyse': 'Scythe',
             'monkey_king_bar': 'MKB', 'silver_edge': 'Silver Edge', 'bloodthorn': 'Bloodthorn',
-            'travel_boots': 'Boots of Travel', 'phase_boots': 'Phase Boots', 'power_treads': 'Power Treads',
-            'arcane_boots': 'Arcane Boots', 'tranquil_boots': 'Tranquil Boots', 'greater_crit': 'Daedalus'
+            'travel_boots': 'BoT', 'phase_boots': 'Phase', 'power_treads': 'Treads',
+            'arcane_boots': 'Arcane', 'tranquil_boots': 'Tranquil', 'maelstrom': 'Maelstrom', 'radiance': 'Radiance'
         };
 
         itemsHtml = '<div style="margin-top:16px"><h4 style="font-size:14px;font-weight:800;margin-bottom:10px;color:#ff6b2c">🛒 Лучшая сборка:</h4><div style="display:flex;flex-wrap:wrap;gap:8px">';
         s.items.forEach(item => {
             const name = itemNames[item] || item.replace(/_/g, ' ');
             itemsHtml += `<div style="text-align:center;width:60px">
-                <img src="${ITEM_URL}${item}.png" style="width:50px;height:38px;object-fit:contain;background:#1a1a1a;border-radius:6px;border:1px solid #2e2e2e" onerror="this.style.display='none'">
+                <img src="${ITEM_URL}${item}.png" style="width:50px;height:38px;object-fit:contain;background:#1a1a1a;border-radius:6px;border:1px solid #2e2e2e" onerror="this.parentElement.style.display='none'">
                 <div style="font-size:9px;color:#a3a3a3;margin-top:3px;line-height:1.2">${name}</div>
             </div>`;
         });
         itemsHtml += '</div></div>';
     }
 
-    // 3. Финальная сборка HTML
     body.innerHTML = `
         <div class="hm-head">
             <img src="${iconUrl}" alt="${hero.name}" class="hm-icon">
@@ -151,9 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeBtn = document.getElementById('heroModalClose');
     if (closeBtn) closeBtn.addEventListener('click', closeHeroModal);
-    
     const modal = document.getElementById('heroModal');
     if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeHeroModal(); });
-    
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeHeroModal(); });
 });
