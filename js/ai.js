@@ -1,10 +1,11 @@
 // ============================================
-// ИИ-АССИСТЕНТ DOTA 2 С ПОЛНЫМ СЛОВАРЁМ СЛЕНГА
+// ИИ-АССИСТЕНТ DOTA 2 С ПОЛНЫМ СЛОВАРЁМ СЛЕНГА И КАРТИНКАМИ ПРЕДМЕТОВ
 // ============================================
 
 class DotaAI {
     constructor() {
         this.iconUrl = 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/';
+        this.itemUrl = 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/items/';
         
         this.slangDictionary = {
             'пудж':'Pudge','пуджа':'Pudge','пуджу':'Pudge','хук':'Pudge','крюк':'Pudge','мясник':'Pudge',
@@ -32,26 +33,26 @@ class DotaAI {
             'ур':'Ursa','медведь':'Ursa',
             'лич':'Lich','лион':'Lion',
             'шаман':'Shadow Shaman','рубик':'Rubick',
-            'бкб':'BKB','black king bar':'BKB',
-            'блинк':'Blink Dagger','бд':'Blink Dagger',
-            'аганим':'Aghanim Scepter','агс':'Aghanim Scepter',
-            'даэдалус':'Daedalus','криты':'Daedalus',
-            'баттерфляй':'Butterfly','бабочка':'Butterfly',
-            'бф':'Battle Fury','батл фури':'Battle Fury',
-            'маэлстром':'Maelstrom','молния':'Maelstrom',
-            'радианс':'Radiance','радик':'Radiance',
-            'глиммер':'Glimmer Cape',
-            'форс':'Force Staff',
-            'сайз':'Scythe of Vyse','хекс':'Scythe of Vyse',
-            'харт':'Heart of Tarrasque',
-            'блейд мейл':'Blade Mail','бм':'Blade Mail',
-            'линкен':'Linken Sphere',
-            'мекансм':'Mekansm',
-            'арканы':'Arcane Boots',
-            'транкилы':'Tranquil Boots',
-            'птр':'Power Treads',
-            'фэйзы':'Phase Boots',
-            'ботинки':'Boots of Speed',
+            'бкб':'black_king_bar','black king bar':'black_king_bar',
+            'блинк':'blink','бд':'blink',
+            'аганим':'ultimate_scepter','агс':'ultimate_scepter',
+            'даэдалус':'daedalus','криты':'daedalus',
+            'баттерфляй':'butterfly','бабочка':'butterfly',
+            'бф':'battle_fury','батл фури':'battle_fury',
+            'маэлстром':'maelstrom','молния':'maelstrom',
+            'радианс':'radiance','радик':'radiance',
+            'глиммер':'glimmer_cape',
+            'форс':'force_staff',
+            'сайз':'scythe','хекс':'scythe',
+            'харт':'heart',
+            'блейд мейл':'blade_mail','бм':'blade_mail',
+            'линкен':'linkens',
+            'мекансм':'guardian_greaves',
+            'арканы':'arcane_boots',
+            'транкилы':'tranquil_boots',
+            'птр':'power_treads',
+            'фэйзы':'phase_boots',
+            'ботинки':'phase_boots',
             'фарм':'фарм','фарминг':'фарм','фармить':'фарм',
             'голда':'золото','деньги':'золото','голди':'золото',
             'ластхит':'ластхит','лх':'ластхит',
@@ -167,8 +168,8 @@ class DotaAI {
             const s = getHeroStats(hero);
             if (s) {
                 metaBlock = '<br>📈 <strong>Мета патча:</strong><br>' +
-                    '• Паблик: винрейт <strong>' + (typeof pct === 'function' ? pct(s.pub_win) : '—') + '</strong>, пикрейт ' + (typeof pct === 'function' ? pct(s.pub_pick) : '—') + '<br>' +
-                    '• Просцена: винрейт <strong>' + (typeof pct === 'function' ? pct(s.pro_win) : '—') + '</strong>, пикрейт ' + (typeof pct === 'function' ? pct(s.pro_pick) : '—');
+                    '• Паблик: винрейт <strong>' + (typeof pct === 'function' ? pct(s.pub_win) : '—') + '</strong><br>' +
+                    '• Просцена: винрейт <strong>' + (typeof pct === 'function' ? pct(s.pro_win) : '—') + '</strong>';
             }
         }
 
@@ -188,15 +189,8 @@ class DotaAI {
             if (lowerQ.includes(syn)) finalQ += ' ' + orig;
         }
 
-        const winKeys = ['винрейт', 'winrate', 'win rate', 'процент побед'];
-        const metaKeys = ['мета', 'meta', 'патч', 'patch', 'топ героев', 'сильные герои', 'актуальн'];
-
-        if (winKeys.some(k => lowerQ.includes(k))) {
-            if (typeof getWinrateAnswer === 'function') {
-                const ans = getWinrateAnswer(finalQ);
-                if (ans) return ans;
-            }
-        }
+        // 1. Вопросы о мете
+        const metaKeys = ['мета', 'meta', 'патч', 'patch', 'топ героев', 'сильные герои', 'актуальн', 'винрейт сейчас', 'какой винрейт', 'винрейт у персонажей', 'винрейт героев', 'топ по винрейту', 'лучшие герои', 'персонажей', 'у всех', 'у героев'];
         if (metaKeys.some(k => lowerQ.includes(k))) {
             if (typeof getMetaAnswer === 'function') {
                 const ans = getMetaAnswer();
@@ -204,21 +198,66 @@ class DotaAI {
             }
         }
 
+        // 2. Винрейт конкретного героя
+        const winKeys = ['винрейт', 'winrate', 'win rate', 'процент побед'];
+        if (winKeys.some(k => lowerQ.includes(k))) {
+            if (typeof getWinrateAnswer === 'function') {
+                const ans = getWinrateAnswer(finalQ);
+                if (ans) return ans;
+            }
+        }
+
+        // 3. База знаний
         for (const [key, answer] of Object.entries(this.knowledgeBase)) {
             if (finalQ.includes(key)) return answer;
         }
 
+        // 4. Герой
         const heroMention = (typeof findHero === 'function') ? findHero(finalQ) : null;
         if (heroMention) return this.formatHeroAnswer(heroMention);
 
-        if (lowerQ.includes('билд') || lowerQ.includes('предметы на')) {
+        // 5. БИЛДЫ И ПРЕДМЕТЫ (С КАРТИНКАМИ!)
+        if (lowerQ.includes('билд') || lowerQ.includes('предметы на') || lowerQ.includes('что купить')) {
             const hero = (typeof findHero === 'function') ? findHero(finalQ) : null;
             if (hero) {
-                return '🛒 <strong>' + hero.name + '</strong> (' + hero.ru + '):<br>• Начало: ветки, фласки, танго<br>• Мидгейм: по роли<br>• Лейт: BKB против магии, Shiva против физов<br><br>💡 Точный билд — на Dotabuff.';
+                const s = (typeof getHeroStats === 'function') ? getHeroStats(hero) : null;
+                
+                const itemNames = {
+                    'battle_fury': 'Battle Fury', 'manta': 'Manta Style', 'abyssal_blade': 'Abyssal Blade',
+                    'butterfly': 'Butterfly', 'black_king_bar': 'BKB', 'blade_mail': 'Blade Mail',
+                    'blink': 'Blink Dagger', 'heart': 'Heart', 'crimson_guard': 'Crimson Guard',
+                    'pipe': 'Pipe', 'ultimate_scepter': 'Aghanim\'s', 'aghanims_shard': 'Aghanim\'s Shard',
+                    'force_staff': 'Force Staff', 'glimmer_cape': 'Glimmer Cape', 'guardian_greaves': 'Guardian Greaves',
+                    'aether_lens': 'Aether Lens', 'dragon_lance': 'Dragon Lance', 'hurricane_pike': 'Hurricane Pike',
+                    'assault': 'Assault', 'skadi': 'Eye of Skadi', 'diffusal_blade': 'Diffusal Blade',
+                    'bloodstone': 'Bloodstone', 'linkens': 'Linken\'s', 'orchid': 'Orchid',
+                    'daedalus': 'Daedalus', 'desolator': 'Desolator', 'satanic': 'Satanic', 'shivas': 'Shiva\'s',
+                    'refresher': 'Refresher', 'octarine_core': 'Octarine', 'scythe': 'Scythe',
+                    'monkey_king_bar': 'MKB', 'silver_edge': 'Silver Edge', 'bloodthorn': 'Bloodthorn',
+                    'travel_boots': 'Boots of Travel', 'phase_boots': 'Phase Boots', 'power_treads': 'Power Treads',
+                    'arcane_boots': 'Arcane Boots', 'tranquil_boots': 'Tranquil Boots', 'greater_crit': 'Daedalus'
+                };
+
+                let itemsHtml = '<div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">';
+                if (s && s.items && s.items.length > 0) {
+                    s.items.forEach(item => {
+                        const name = itemNames[item] || item.replace(/_/g, ' ');
+                        itemsHtml += `<div style="text-align:center; width:65px;">
+                            <img src="${this.itemUrl}${item}.png" style="width:50px; height:38px; object-fit:contain; background:#1a1a1a; border-radius:6px; border:1px solid #2e2e2e;" onerror="this.style.display='none'">
+                            <div style="font-size:10px; color:#a3a3a3; margin-top:4px; line-height:1.2;">${name}</div>
+                        </div>`;
+                    });
+                } else {
+                    itemsHtml += '<span style="color:#a3a3a3; font-size:13px;">Данные о предметах загружаются...</span>';
+                }
+                itemsHtml += '</div>';
+
+                return `🛒 <strong>Лучшая сборка на ${hero.name} (${hero.ru}):</strong><br>${itemsHtml}<br><br>💡 <em>Совет: нажми на карточку героя в списке, чтобы увидеть подробную статистику!</em>`;
             }
             return '🛒 Укажи героя! Например: "билд на Пуджа" или "что купить на цмку"';
         }
 
+        // 6. Контрпики
         if (lowerQ.includes('контр')) {
             const hero = (typeof findHero === 'function') ? findHero(finalQ) : null;
             if (hero) {
@@ -227,10 +266,12 @@ class DotaAI {
             return '🔄 Уточни героя! Например: "контрпики на Инвокера" или "как контрить пуджа"';
         }
 
+        // 7. Общие вопросы
         if (lowerQ.includes('как') && (lowerQ.includes('играть') || lowerQ.includes('начать'))) {
             return '🎮 Основы: 1) Фарми 2) Покупай предметы 3) Тимфайты 4) Ломай башни. Спроси о герое или механике!';
         }
 
+        // 8. Запасной ответ
         return '🤔 Попробуй спросить:<br>• "Винрейт Пуджа"<br>• "Билд на Джаггернаута"<br>• "Какая сейчас мета?"<br>• "Расскажи про Инвокера"<br>• "Что такое БКБ?"<br>• "Как фармить?"<br>• "Роли в Доте"';
     }
 }
